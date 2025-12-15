@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+body{
+  background-color: #9b0d25;
+}
+
+@layer base {
+  :root {
+    /* Heart-themed vibrant colors */
+    --background: 0 0% 100%;
+    --foreground: 220 40% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 40% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 40% 20%;
+
+    /* Primary: Vibrant heart red/pink */
+    --primary: 345 85% 65%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 345 90% 75%;
+
+    /* Secondary: Calm medical blue */
+    --secondary: 210 80% 90%;
+    --secondary-foreground: 210 80% 30%;
+
+    /* Muted: Soft neutral */
+    --muted: 220 20% 96%;
+    --muted-foreground: 220 20% 50%;
+
+    /* Accent: Soft coral */
+    --accent: 15 90% 70%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 90%;
+    --input: 220 20% 94%;
+    --ring: 345 85% 65%;
+
+    --radius: 1rem;
+    
+    /* Custom design tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(345, 85%, 65%), hsl(345, 90%, 75%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210, 80%, 70%), hsl(250, 80%, 75%));
+    --gradient-hero: linear-gradient(180deg, hsl(345, 90%, 98%), hsl(210, 90%, 98%));
+    --shadow-glow: 0 10px 40px -10px hsl(345 85% 65% / 0.3);
+    --shadow-card: 0 4px 20px -4px hsl(220 20% 50% / 0.1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+
+    /* Health metrics colors */
+    --health-heart: 0 84% 60%;
+    --health-heart-glow: 0 84% 70%;
+    --health-bp: 217 91% 60%;
+    --health-bp-glow: 217 91% 70%;
+    --health-stress: 280 70% 60%;
+    --health-stress-glow: 280 70% 70%;
+    --health-exercise: 30 100% 50%;
+    --health-exercise-glow: 30 100% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222.2 47.4% 11.2%) 0%, hsl(217 91% 60%) 100%);
+    --gradient-card: linear-gradient(to bottom right, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    
+    /* Shadows */
+    --shadow-glow: 0 8px 32px -8px hsl(217 91% 60% / 0.3);
+    --shadow-card: 0 4px 16px -4px hsl(222.2 47.4% 11.2% / 0.1);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+
+  }
+
+  .dark {
+    --background: 220 40% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 35% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 35% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 345 85% 65%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 345 90% 75%;
+
+    --secondary: 210 80% 20%;
+    --secondary-foreground: 210 80% 90%;
+
+    --muted: 220 30% 18%;
+    --muted-foreground: 220 20% 65%;
+
+    --accent: 15 90% 70%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 30% 18%;
+    --input: 220 30% 18%;
+    --ring: 345 85% 65%;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(345, 85%, 65%), hsl(345, 90%, 75%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210, 80%, 40%), hsl(250, 80%, 50%));
+    --gradient-hero: linear-gradient(180deg, hsl(220, 40%, 8%), hsl(220, 35%, 12%));
+    --shadow-glow: 0 10px 40px -10px hsl(345 85% 65% / 0.5);
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+       /* Health metrics colors - dark mode */
+    --health-heart: 0 84% 65%;
+    --health-heart-glow: 0 84% 75%;
+    --health-bp: 217 91% 65%;
+    --health-bp-glow: 217 91% 75%;
+    --health-stress: 280 70% 65%;
+    --health-stress-glow: 280 70% 75%;
+    --health-exercise: 30 100% 55%;
+    --health-exercise-glow: 30 100% 65%;
+
+    /* Gradients - dark mode */
+    --gradient-primary: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(217 91% 60%) 100%);
+    --gradient-card: linear-gradient(to bottom right, hsl(var(--card)) 0%, hsl(217.2 32.6% 20%) 100%);
+    
+    /* Shadows - dark mode */
+    --shadow-glow: 0 8px 32px -8px hsl(217 91% 60% / 0.5);
+    --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  
+  @keyframes pulse-heart {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  .animate-pulse-heart {
+    animation: pulse-heart 2s ease-in-out infinite;
+  }
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.15);
+  }
+  40% {
+    transform: scale(0.95);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2.5s ease-in-out infinite;
+}
