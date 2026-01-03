@@ -16,13 +16,13 @@ const Analyze = () => {
     sleepHours: "",
     mood: "",
   });
-  
+
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.foodToday || !formData.exerciseMinutes || !formData.sleepHours || !formData.mood) {
       toast.error("Please fill in all fields");
       return;
@@ -35,7 +35,7 @@ const Analyze = () => {
       const exerciseMin = parseInt(formData.exerciseMinutes);
       const sleepHrs = parseFloat(formData.sleepHours);
       const hasUnhealthyHabits = formData.smokedDrank !== "no";
-      
+
       let predictedHeartRate = 72;
       if (exerciseMin > 30) predictedHeartRate -= 5;
       if (exerciseMin < 15) predictedHeartRate += 8;
@@ -43,14 +43,14 @@ const Analyze = () => {
       if (hasUnhealthyHabits) predictedHeartRate += 10;
       if (formData.mood === "stressed") predictedHeartRate += 8;
       if (formData.mood === "calm" || formData.mood === "happy") predictedHeartRate -= 3;
-      
+
       let systolic = 120;
       let diastolic = 80;
       if (exerciseMin < 20) { systolic += 5; diastolic += 3; }
       if (hasUnhealthyHabits) { systolic += 8; diastolic += 5; }
       if (sleepHrs < 7) { systolic += 6; diastolic += 4; }
       if (formData.mood === "stressed") { systolic += 10; diastolic += 5; }
-      
+
       const heartRateStatus = predictedHeartRate > 80 ? "slightly elevated" : predictedHeartRate < 60 ? "lower than average" : "optimal";
       const bpStatus = systolic > 125 ? "slightly elevated" : "healthy";
 
@@ -76,7 +76,7 @@ ${sleepHrs < 7 ? "🌙 Prioritize 8+ hours of sleep tonight\n" : ""}${exerciseMi
 🧘 Practice 10 minutes of meditation
 ${formData.mood === "stressed" ? "💆 Take breaks and manage stress\n" : ""}
 Keep up the great work! Your heart will thank you. ❤️`;
-      
+
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
       toast.success("Analysis complete! 🎉");
@@ -84,7 +84,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
   };
 
   return (
-     <div
+    <div
       className="min-h-screen text-white"
       style={{ backgroundColor: "#984e5aff" }}
     >
@@ -185,11 +185,11 @@ Keep up the great work! Your heart will thank you. ❤️`;
                         <SelectValue placeholder="How are you feeling?" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="happy">Happy 😊</SelectItem>
-                        <SelectItem value="calm">Calm 😌</SelectItem>
-                        <SelectItem value="stressed">Stressed 😰</SelectItem>
-                        <SelectItem value="tired">Tired 😴</SelectItem>
-                        <SelectItem value="energetic">Energetic ⚡</SelectItem>
+                        <SelectItem value="happy">Happy </SelectItem>
+                        <SelectItem value="calm">Calm </SelectItem>
+                        <SelectItem value="stressed">Stressed </SelectItem>
+                        <SelectItem value="tired">Tired </SelectItem>
+                        <SelectItem value="energetic">Energetic </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -207,7 +207,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
                     ) : (
                       <>
                         <Sparkles className="w-5 h-5 mr-2" />
-                        Analyze Now 🚀
+                        Analyze Now
                       </>
                     )}
                   </Button>
@@ -287,7 +287,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
                         </div>
                         Lifestyle Impact
                       </h3>
-                      
+
                       <div className="grid gap-3">
                         {/* Sleep */}
                         <div className="flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800 rounded-lg">
@@ -296,13 +296,12 @@ Keep up the great work! Your heart will thank you. ❤️`;
                             <p className="font-medium text-sm">Sleep Quality</p>
                             <p className="text-xs text-muted-foreground">{formData.sleepHours} hours</p>
                           </div>
-                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            parseFloat(formData.sleepHours) >= 8 ? "bg-green-500/20 text-green-700" :
-                            parseFloat(formData.sleepHours) >= 7 ? "bg-yellow-500/20 text-yellow-700" :
-                            "bg-red-500/20 text-red-700"
-                          }`}>
+                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${parseFloat(formData.sleepHours) >= 8 ? "bg-green-500/20 text-green-700" :
+                              parseFloat(formData.sleepHours) >= 7 ? "bg-yellow-500/20 text-yellow-700" :
+                                "bg-red-500/20 text-red-700"
+                            }`}>
                             {parseFloat(formData.sleepHours) >= 8 ? "Excellent" :
-                             parseFloat(formData.sleepHours) >= 7 ? "Good" : "Poor"}
+                              parseFloat(formData.sleepHours) >= 7 ? "Good" : "Poor"}
                           </div>
                         </div>
 
@@ -313,13 +312,12 @@ Keep up the great work! Your heart will thank you. ❤️`;
                             <p className="font-medium text-sm">Physical Activity</p>
                             <p className="text-xs text-muted-foreground">{formData.exerciseMinutes} minutes</p>
                           </div>
-                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            parseInt(formData.exerciseMinutes) >= 30 ? "bg-green-500/20 text-green-700" :
-                            parseInt(formData.exerciseMinutes) > 0 ? "bg-yellow-500/20 text-yellow-700" :
-                            "bg-red-500/20 text-red-700"
-                          }`}>
+                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${parseInt(formData.exerciseMinutes) >= 30 ? "bg-green-500/20 text-green-700" :
+                              parseInt(formData.exerciseMinutes) > 0 ? "bg-yellow-500/20 text-yellow-700" :
+                                "bg-red-500/20 text-red-700"
+                            }`}>
                             {parseInt(formData.exerciseMinutes) >= 30 ? "Active" :
-                             parseInt(formData.exerciseMinutes) > 0 ? "Moderate" : "Inactive"}
+                              parseInt(formData.exerciseMinutes) > 0 ? "Moderate" : "Inactive"}
                           </div>
                         </div>
 
@@ -329,14 +327,13 @@ Keep up the great work! Your heart will thank you. ❤️`;
                           <div className="flex-1">
                             <p className="font-medium text-sm">Daily Habits</p>
                             <p className="text-xs text-muted-foreground">
-                              {formData.smokedDrank === "no" ? "No smoking/drinking" : 
-                               formData.smokedDrank === "smoked" ? "Smoked today" :
-                               formData.smokedDrank === "drank" ? "Drank alcohol" : "Both"}
+                              {formData.smokedDrank === "no" ? "No smoking/drinking" :
+                                formData.smokedDrank === "smoked" ? "Smoked today" :
+                                  formData.smokedDrank === "drank" ? "Drank alcohol" : "Both"}
                             </p>
                           </div>
-                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            formData.smokedDrank === "no" ? "bg-green-500/20 text-green-700" : "bg-red-500/20 text-red-700"
-                          }`}>
+                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${formData.smokedDrank === "no" ? "bg-green-500/20 text-green-700" : "bg-red-500/20 text-red-700"
+                            }`}>
                             {formData.smokedDrank === "no" ? "Healthy" : "Risky"}
                           </div>
                         </div>
@@ -348,12 +345,11 @@ Keep up the great work! Your heart will thank you. ❤️`;
                             <p className="font-medium text-sm">Mental Wellness</p>
                             <p className="text-xs text-muted-foreground capitalize">{formData.mood}</p>
                           </div>
-                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            formData.mood === "happy" || formData.mood === "calm" || formData.mood === "energetic" 
-                              ? "bg-green-500/20 text-green-700" 
+                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${formData.mood === "happy" || formData.mood === "calm" || formData.mood === "energetic"
+                              ? "bg-green-500/20 text-green-700"
                               : "bg-yellow-500/20 text-yellow-700"
-                          }`}>
-                            {formData.mood === "happy" || formData.mood === "calm" || formData.mood === "energetic" 
+                            }`}>
+                            {formData.mood === "happy" || formData.mood === "calm" || formData.mood === "energetic"
                               ? "Positive" : "Monitor"}
                           </div>
                         </div>
@@ -442,7 +438,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
                       <Sparkles className="w-10 h-10 text-primary animate-pulse" />
                     </div>
                     <p className="text-muted-foreground max-w-md">
-                      Enter your lifestyle data and click <b>"Analyze Now"</b> to see your personalized AI health report 💙
+                      Enter your lifestyle data and click <b>"Analyze Now"</b> to see your personalized AI health report 
                     </p>
                   </div>
                 )}

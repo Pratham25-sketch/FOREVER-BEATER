@@ -83,22 +83,31 @@ const AddReading = () => {
               />
             </div>
 
-            {/* Stress Level */}
-            <div>
-              <Label>Stress Level</Label>
-              <select
-                name="stressLevel"
-                value={form.stressLevel}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border rounded-md"
-              >
-                <option value="">Select</option>
-                <option value="Low">Low</option>
-                <option value="Moderate">Moderate</option>
-                <option value="High">High</option>
-              </select>
-            </div>
+          
+          {/* Stress Level */}
+<div>
+  <Label>Stress Level</Label>
+  <select
+    name="stressLevel"
+    value={form.stressLevel}
+    onChange={handleChange}
+    required
+    className="
+      w-full h-11 px-3 rounded-lg border
+      bg-white text-gray-900
+      dark:bg-neutral-900 dark:text-white
+      border-input dark:border-neutral-700
+      focus:outline-none focus:ring-2 focus:ring-primary
+      transition
+    "
+  >
+    <option value="">Select</option>
+    <option value="Low">Low</option>
+    <option value="Moderate">Moderate</option>
+    <option value="High">High</option>
+  </select>
+</div>
+
 
             {/* Sleep Hours */}
             <div>
