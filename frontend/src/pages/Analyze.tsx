@@ -19,6 +19,8 @@ const Analyze = () => {
 
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [predictedHR, setPredictedHR] = useState<number | null>(null);
+const [predictedBP, setPredictedBP] = useState<{ sys: number; dia: number } | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,52 +38,115 @@ const Analyze = () => {
       const sleepHrs = parseFloat(formData.sleepHours);
       const hasUnhealthyHabits = formData.smokedDrank !== "no";
 
-      let predictedHeartRate = 72;
-      if (exerciseMin > 30) predictedHeartRate -= 5;
-      if (exerciseMin < 15) predictedHeartRate += 8;
-      if (sleepHrs < 7) predictedHeartRate += 6;
+      let predictedHeartRate = 70; // optimal resting HR (AHA: 60–75)
+      if (exerciseMin >= 30) predictedHeartRate -= 5;     // WHO recommended activity
+if (exerciseMin > 0 && exerciseMin < 30) predictedHeartRate += 3;
+if (exerciseMin === 0) predictedHeartRate += 8;
+      if (sleepHrs < 7) predictedHeartRate += 7;          // CDC: sleep deprivation raises HR
+if (sleepHrs > 9) predictedHeartRate += 3;          // oversleeping also correlates
+
       if (hasUnhealthyHabits) predictedHeartRate += 10;
-      if (formData.mood === "stressed") predictedHeartRate += 8;
-      if (formData.mood === "calm" || formData.mood === "happy") predictedHeartRate -= 3;
+      if (formData.mood === "stressed") predictedHeartRate += 8;   // cortisol effect
+if (formData.mood === "calm" || formData.mood === "happy") predictedHeartRate -= 2;
 
-      let systolic = 120;
-      let diastolic = 80;
-      if (exerciseMin < 20) { systolic += 5; diastolic += 3; }
-      if (hasUnhealthyHabits) { systolic += 8; diastolic += 5; }
+
+      let systolic = 118;
+let diastolic = 76; // healthy adult baseline
+
+      if (exerciseMin === 0) { systolic += 8; diastolic += 5; }
+if (exerciseMin > 0 && exerciseMin < 30) { systolic += 4; diastolic += 2; }
+
+      if (hasUnhealthyHabits) { systolic += 10; diastolic += 6; }
       if (sleepHrs < 7) { systolic += 6; diastolic += 4; }
-      if (formData.mood === "stressed") { systolic += 10; diastolic += 5; }
+      if (formData.mood === "stressed") { systolic += 8; diastolic += 5; }
 
-      const heartRateStatus = predictedHeartRate > 80 ? "slightly elevated" : predictedHeartRate < 60 ? "lower than average" : "optimal";
-      const bpStatus = systolic > 125 ? "slightly elevated" : "healthy";
+    const heartRateStatus =
+  predictedHeartRate < 60
+    ? "lower than normal"
+    : predictedHeartRate <= 80
+    ? "optimal"
+    : predictedHeartRate <= 90
+    ? "slightly elevated"
+    : "high";
 
-      const mockAnalysis = `Based on your lifestyle data today, here's your comprehensive health analysis:
+const bpStatus =
+  systolic < 120 && diastolic < 80
+    ? "healthy"
+    : systolic < 130
+    ? "elevated"
+    : "high";
 
-**Predicted Vital Signs:**
+const mockAnalysis = `Based on your lifestyle data today, here's your comprehensive health analysis:
+
+Predicted Vital Signs:
 🫀 Heart Rate: ${predictedHeartRate} BPM (${heartRateStatus})
 🩺 Blood Pressure: ${systolic}/${diastolic} mmHg (${bpStatus})
 
-**Key Insights:**
-${predictedHeartRate > 80 ? "⚠️ Your heart rate is elevated. Consider stress management and adequate rest." : "✅ Your heart rate is in a healthy range."}
-${systolic > 125 ? "⚠️ Blood pressure is slightly high. Monitor sodium intake and stress levels." : "✅ Blood pressure is healthy."}
+Key Insights:
+${
+  predictedHeartRate > 90
+    ? "⚠️ Your heart rate is high. This may be linked to stress, poor sleep, or low physical activity."
+    : predictedHeartRate > 80
+    ? "⚠️ Your heart rate is slightly elevated. Consider relaxation and adequate rest."
+    : predictedHeartRate < 60
+    ? "ℹ️ Your heart rate is lower than average. This can be normal if you are physically active."
+    : "✅ Your heart rate is within a healthy range."
+}
+${
+  systolic >= 130
+    ? "⚠️ Blood pressure is high. Monitor stress, salt intake, and physical activity."
+    : systolic >= 120
+    ? "⚠️ Blood pressure is slightly elevated. Lifestyle improvements can help."
+    : "✅ Blood pressure is within a healthy range."
+}
 
-**Lifestyle Factors:**
-🍽️ Nutrition: ${formData.foodToday.toLowerCase().includes("vegetable") || formData.foodToday.toLowerCase().includes("fruit") ? "Good food choices detected!" : "Consider adding more whole foods."}
-💪 Exercise: ${exerciseMin >= 30 ? "Excellent! You've met the daily activity goal." : exerciseMin > 0 ? "Good start, aim for 30 minutes daily." : "Try to add some physical activity."}
-😴 Sleep: ${sleepHrs >= 8 ? "Perfect rest!" : sleepHrs >= 7 ? "Good, but try to get 8-9 hours." : "⚠️ Insufficient sleep detected."}
-${hasUnhealthyHabits ? "⚠️ Smoking/drinking detected - significantly impacts cardiovascular health." : "✅ No smoking/drinking - great for your heart!"}
+Lifestyle Factors:
+🍽️ Nutrition: ${
+  formData.foodToday.toLowerCase().includes("vegetable") ||
+  formData.foodToday.toLowerCase().includes("fruit")
+    ? "Good food choices detected!"
+    : "Consider adding more fruits and vegetables."
+}
+💪 Exercise: ${
+  exerciseMin >= 30
+    ? "Excellent! You've met the daily activity goal."
+    : exerciseMin > 0
+    ? "Good start, aim for at least 30 minutes daily."
+    : "Try to add some physical activity."
+}
+😴 Sleep: ${
+  sleepHrs >= 8
+    ? "Excellent sleep duration."
+    : sleepHrs >= 7
+    ? "Good sleep, but aim for 8–9 hours."
+    : "⚠️ Insufficient sleep detected."
+}
+${
+  hasUnhealthyHabits
+    ? "⚠️ Smoking or alcohol use detected — this increases cardiovascular risk."
+    : "✅ No smoking or drinking — great for heart health!"
+}
 
-**Personalized Recommendations:**
-${sleepHrs < 7 ? "🌙 Prioritize 8+ hours of sleep tonight\n" : ""}${exerciseMin < 30 ? "🏃 Add 30 minutes of cardio exercise\n" : ""}${hasUnhealthyHabits ? "🚭 Avoid smoking/drinking tomorrow\n" : ""}💧 Drink 8-10 glasses of water
-🥗 Focus on lean proteins and vegetables
-🧘 Practice 10 minutes of meditation
-${formData.mood === "stressed" ? "💆 Take breaks and manage stress\n" : ""}
-Keep up the great work! Your heart will thank you. ❤️`;
+Personalized Recommendations:
+${sleepHrs < 7 ? "🌙 Aim for at least 8 hours of sleep tonight\n" : ""}${
+  exerciseMin < 30 ? "🏃 Try to include 30 minutes of physical activity\n" : ""
+}${hasUnhealthyHabits ? "🚭 Avoid smoking or alcohol to protect your heart\n" : ""}💧 Stay hydrated with 8–10 glasses of water
+🥗 Eat balanced meals with whole foods
+🧘 Practice stress-relief techniques like meditation
+${formData.mood === "stressed" ? "💆 Take breaks and manage stress levels\n" : ""}
+Keep up the good work — small habits make a big difference ❤️`;
 
-      setAnalysis(mockAnalysis);
-      setIsAnalyzing(false);
-      toast.success("Analysis complete! 🎉");
+setPredictedHR(predictedHeartRate);
+setPredictedBP({ sys: systolic, dia: diastolic });
+
+setAnalysis(mockAnalysis);
+setIsAnalyzing(false);
+toast.success("Analysis complete!");
+
     }, 2000);
   };
+
+
 
   return (
     <div
@@ -91,7 +156,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="space-y-8">
           <div className="bg-gradient-to-r from-primary to-accent rounded-2xl p-8 text-primary-foreground shadow-lg">
-            <h1 className="text-4xl font-bold mb-2">AI Health Analysis 🤖</h1>
+            <h1 className="text-4xl font-bold mb-2">AI Health Analysis</h1>
             <p className="text-primary-foreground/90 text-lg">Get personalized insights powered by AI</p>
           </div>
 
@@ -218,7 +283,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
             {/* Analysis Results */}
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>AI Health Prediction 💡</CardTitle>
+                <CardTitle>AI Health Prediction</CardTitle>
                 <CardDescription>
                   Predicted vital signs and personalized recommendations
                 </CardDescription>
@@ -240,16 +305,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
                         </div>
                         <h3 className="font-semibold text-red-900 dark:text-red-100 mb-1">Heart Rate</h3>
                         <p className="text-3xl font-bold text-red-700 dark:text-red-300">
-                          {(() => {
-                            let hr = 72;
-                            if (parseInt(formData.exerciseMinutes) > 30) hr -= 5;
-                            if (parseInt(formData.exerciseMinutes) < 15) hr += 8;
-                            if (parseFloat(formData.sleepHours) < 7) hr += 6;
-                            if (formData.smokedDrank !== "no") hr += 10;
-                            if (formData.mood === "stressed") hr += 8;
-                            if (formData.mood === "calm" || formData.mood === "happy") hr -= 3;
-                            return hr;
-                          })()}
+                        {predictedHR ?? "--"}
                         </p>
                         <p className="text-xs text-red-600 dark:text-red-400 mt-1">BPM (predicted)</p>
                       </div>
@@ -266,14 +322,7 @@ Keep up the great work! Your heart will thank you. ❤️`;
                         </div>
                         <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Blood Pressure</h3>
                         <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                          {(() => {
-                            let sys = 120, dia = 80;
-                            if (parseInt(formData.exerciseMinutes) < 20) { sys += 5; dia += 3; }
-                            if (formData.smokedDrank !== "no") { sys += 8; dia += 5; }
-                            if (parseFloat(formData.sleepHours) < 7) { sys += 6; dia += 4; }
-                            if (formData.mood === "stressed") { sys += 10; dia += 5; }
-                            return `${sys}/${dia}`;
-                          })()}
+                         {predictedBP ? `${predictedBP.sys}/${predictedBP.dia}` : "--"}
                         </p>
                         <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">mmHg (predicted)</p>
                       </div>

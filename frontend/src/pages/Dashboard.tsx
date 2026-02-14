@@ -77,8 +77,16 @@ const Dashboard = () => {
         data.forEach((r) => {
           if (r.stressLevel in stressCount) stressCount[r.stressLevel] += 1;
         });
-        const stressLevel =
-          stressCount.High > 1 ? "High" : stressCount.Moderate > 2 ? "Moderate" : "Low";
+      let stressLevel: "Low" | "Moderate" | "High" = "Low";
+
+if (stressCount.High >= stressCount.Moderate && stressCount.High >= stressCount.Low && stressCount.High > 0) {
+  stressLevel = "High";
+} else if (stressCount.Moderate >= stressCount.Low && stressCount.Moderate > 0) {
+  stressLevel = "Moderate";
+} else {
+  stressLevel = "Low";
+}
+
 
         const computed = {
           heartRate: avg(heartRates),
@@ -160,7 +168,7 @@ const Dashboard = () => {
         {/* Recent Readings */}
         <Card className="shadow-card border border-primary/10">
           <CardHeader>
-            <CardTitle>Recent Readings 📊</CardTitle>
+            <CardTitle>Recent Readings📊</CardTitle>
             <CardDescription>Your last {readings.length} health entries</CardDescription>
           </CardHeader>
           <CardContent>
@@ -207,7 +215,7 @@ const Dashboard = () => {
         {/* AI Health Tip */}
         <Card className="shadow-card border-l-4 border-l-primary">
           <CardHeader>
-            <CardTitle>💡 Health Tip of the Day</CardTitle>
+            <CardTitle>Health Tip of the Day💡</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed tracking-wide">
@@ -253,21 +261,49 @@ const generateHealthTip = ({
 }) => {
   let tip = "Based on your recent trends:\n\n";
 
-  if (heartRate > 95) tip += "• Your average heart rate is slightly elevated — try deep breathing and hydrate.\n";
-  else tip += "• Your average heart rate looks stable — good cardiovascular control!\n";
+  // ---- HEART RATE ----
+  if (heartRate > 90) {
+    tip += "• Your average heart rate is high — this may be due to stress, poor sleep, or low physical activity.\n";
+  } else if (heartRate > 80) {
+    tip += "• Your average heart rate is slightly elevated — consider relaxation and proper rest.\n";
+  } else if (heartRate < 60) {
+    tip += "• Your heart rate is on the lower side — this can be normal if you are physically active.\n";
+  } else {
+    tip += "• Your average heart rate is within a healthy range — good cardiovascular balance!\n";
+  }
 
-  if (stressLevel === "High") tip += "• Stress is high — consider a short walk, breathing exercises, or meditation today.\n";
-  else if (stressLevel === "Moderate") tip += "• Stress is moderate — take regular short breaks and avoid long screen sessions.\n";
-  else tip += "• Stress is low — keep up the good mental balance!\n";
+  // ---- BLOOD PRESSURE ----
+  const [sys, dia] = bp.split("/").map(Number);
 
-  if (exercise < 30) tip += "• Try increasing daily activity to at least 30 minutes for better stamina.\n";
-  else tip += "• Your exercise level is good — maintain consistency for long-term benefits.\n";
+  if (sys >= 130 || dia >= 80) {
+    tip += "• Your average blood pressure is high — reduce salt intake, manage stress, and stay active.\n";
+  } else if (sys >= 120) {
+    tip += "• Your blood pressure is slightly elevated — lifestyle improvements can help bring it down.\n";
+  } else {
+    tip += "• Your blood pressure is within a healthy range — keep maintaining these habits.\n";
+  }
 
-  tip += `• Your average blood pressure is around ${bp} — keep monitoring and consult a doctor if readings rise.\n\n`;
-  tip += "Remember: small daily habits compound into better heart health. ❤️";
+  // ---- STRESS ----
+  if (stressLevel === "High") {
+    tip += "• Stress levels are high — consider meditation, breathing exercises, or a short walk.\n";
+  } else if (stressLevel === "Moderate") {
+    tip += "• Stress is moderate — take short breaks and avoid long continuous work sessions.\n";
+  } else {
+    tip += "• Stress levels are low — great mental balance!\n";
+  }
+
+  // ---- EXERCISE ----
+  if (exercise < 30) {
+    tip += "• Try to reach at least 30 minutes of daily physical activity for heart health.\n";
+  } else {
+    tip += "• Your exercise routine looks good — consistency is key!\n";
+  }
+
+  tip += "\nRemember: these are lifestyle-based insights, not medical diagnoses. ❤️";
 
   return tip;
 };
+
 
 export default Dashboard;
 

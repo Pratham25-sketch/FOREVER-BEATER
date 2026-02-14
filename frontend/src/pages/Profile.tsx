@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
@@ -90,15 +91,7 @@ const Profile = () => {
                   </AvatarFallback>
                 </Avatar>
 
-                <label className="absolute bottom-0 right-[35%] bg-primary p-2 rounded-full cursor-pointer">
-                  <Camera className="text-white w-4 h-4" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfilePic}
-                    className="hidden"
-                  />
-                </label>
+               
               </div>
 
               <CardTitle className="text-2xl">{name}</CardTitle>
@@ -115,9 +108,15 @@ const Profile = () => {
 
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="w-full">
-                    <Edit className="w-4 h-4 mr-2" /> Edit Profile
-                  </Button>
+                 <Button asChild variant="outline" className="w-full">
+  <Link to="/settings">
+    <Edit className="w-4 h-4 mr-2" />
+    Edit Profile
+  </Link>
+</Button>
+
+
+                  
                 </DialogTrigger>
 
                 <DialogContent>

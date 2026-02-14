@@ -42,6 +42,23 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+const getHeartStatus = () => {
+  const avgHR = Number(localStorage.getItem("avgHR"));
+  const avgSys = Number(localStorage.getItem("avgSys"));
+  const avgDia = Number(localStorage.getItem("avgDia"));
+
+  if (avgHR >= 100 || avgSys >= 140 || avgDia >= 90) {
+    return { label: "Unstable", color: "bg-red-500" };
+  }
+
+  if (avgHR >= 81 || avgSys >= 130 || avgDia >= 85) {
+    return { label: "Needs Attention", color: "bg-yellow-500" };
+  }
+
+  return { label: "Stable", color: "bg-green-500" };
+};
+
+
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const { user } = useUser();
@@ -110,10 +127,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </Button>
       </Link>
 
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted text-sm">
-        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-        Heart Status: Stable
-      </div>
+     <Link to="/analyze">
+        <Button className="rounded-full bg-gradient-to-r from-primary to-accent text-white shadow-md hover:scale-105 transition">
+          + Analyze Now
+        </Button>
+      </Link>
+
     </div>
 {/* Right Controls */}
 <div className="flex items-center gap-4">
@@ -137,7 +156,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   </Button>
 
   {/* About the Creator */}
-  <Link to="/creator" className="block">
+  <Link to="https://prathams-portfolio-224u.onrender.com/" className="block">
     <Button
       variant="ghost"
       className="flex items-center gap-2 h-11 px-4 rounded-full border border-border "
@@ -146,7 +165,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         👨‍💻
       </span>
       <span className="text-sm font-medium hidden md:inline">
-        About Us
+        About the creator
       </span>
     </Button>
   </Link>
