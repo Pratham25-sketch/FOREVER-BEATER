@@ -66,14 +66,14 @@ async function start() {
   const { MONGODB_URI, PORT = 8080 } = process.env;
 
   if (!MONGODB_URI) {
-    throw new Error("❌ MONGODB_URI is required in .env");
+    throw new Error("MONGODB_URI is required in .env");
   }
 
   await mongoose.connect(MONGODB_URI);
-  console.log("✅ MongoDB connected");
+  console.log("MongoDB connected");
 
   app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
   });
 }
 
